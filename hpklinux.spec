@@ -1,5 +1,5 @@
 Summary:	Linux HPI driver for AudioScience audio adapters
-Summary(pl):	Linuksowy sterownik HPI do kart d¼wiêkowych AudioScience
+Summary(pl.UTF-8):   Linuksowy sterownik HPI do kart dÅºwiÄ™kowych AudioScience
 Name:		hpklinux
 Version:	3.05.06
 Release:	1
@@ -21,44 +21,44 @@ Linux HPI driver for AudioScience audio adapters.
 
 This package contains userspace utilities.
 
-%description -l pl
-Linuksowy sterownik HPI do kart d¼wiêkowych AudioScience.
+%description -l pl.UTF-8
+Linuksowy sterownik HPI do kart dÅºwiÄ™kowych AudioScience.
 
-Ten pakiet zawiera narzêdzia przestrzeni u¿ytkownika.
+Ten pakiet zawiera narzÄ™dzia przestrzeni uÅ¼ytkownika.
 
 %package libs
 Summary:	HPI library for AudioScience audio adapters
-Summary(pl):	Biblioteka HPI do kart d¼wiêkowych AudioScience
+Summary(pl.UTF-8):   Biblioteka HPI do kart dÅºwiÄ™kowych AudioScience
 Group:		Libraries
 
 %description libs
 HPI library for AudioScience audio adapters.
 
-%description libs -l pl
-Biblioteka HPI do kart d¼wiêkowych AudioScience.
+%description libs -l pl.UTF-8
+Biblioteka HPI do kart dÅºwiÄ™kowych AudioScience.
 
 %package devel
 Summary:	Header files for HPI library
-Summary(pl):	Pliki nag³ówkowe biblioteki HPI
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe biblioteki HPI
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
 %description devel
 Header files for HPI library.
 
-%description devel -l pl
-Pliki nag³ówkowe biblioteki HPI.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe biblioteki HPI.
 
 %package static
 Summary:	Static HPI library
-Summary(pl):	Statyczna biblioteka HPI
+Summary(pl.UTF-8):   Statyczna biblioteka HPI
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static HPI library.
 
-%description static -l pl
+%description static -l pl.UTF-8
 Statyczna biblioteka HPI.
 
 %prep
