@@ -1,5 +1,5 @@
 Summary:	Linux HPI driver for AudioScience audio adapters
-Summary(pl.UTF-8):   Linuksowy sterownik HPI do kart dźwiękowych AudioScience
+Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
 Version:	3.05.06
 Release:	1
@@ -28,7 +28,7 @@ Ten pakiet zawiera narzędzia przestrzeni użytkownika.
 
 %package libs
 Summary:	HPI library for AudioScience audio adapters
-Summary(pl.UTF-8):   Biblioteka HPI do kart dźwiękowych AudioScience
+Summary(pl.UTF-8):	Biblioteka HPI do kart dźwiękowych AudioScience
 Group:		Libraries
 
 %description libs
@@ -39,7 +39,7 @@ Biblioteka HPI do kart dźwiękowych AudioScience.
 
 %package devel
 Summary:	Header files for HPI library
-Summary(pl.UTF-8):   Pliki nagłówkowe biblioteki HPI
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki HPI
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 
@@ -51,7 +51,7 @@ Pliki nagłówkowe biblioteki HPI.
 
 %package static
 Summary:	Static HPI library
-Summary(pl.UTF-8):   Statyczna biblioteka HPI
+Summary(pl.UTF-8):	Statyczna biblioteka HPI
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
