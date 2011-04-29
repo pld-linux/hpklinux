@@ -1,14 +1,13 @@
 Summary:	Linux HPI driver for AudioScience audio adapters
 Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
-Version:	3.05.06
+Version:	4.06.03
 Release:	1
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: http://www.audioscience.com/internet/download/linux_drivers.htm
-Source0:	http://www.audioscience.com/internet/download/%{name}-%{version}.tar.bz2
-# Source0-md5:	93a61e560711ecb52f09a98beb2dc2b3
-Patch0:		%{name}-link.patch
+Source0:	http://audioscience.com/internet/download/drivers/released/v4/06/03/%{name}-%{version}.tar.bz2
+# Source0-md5:	18b4f3864cdecec5c17ec222ee17f2c7
 URL:		http://www.audioscience.com/internet/download/linux_drivers.htm
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -63,7 +62,6 @@ Statyczna biblioteka HPI.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -88,19 +86,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog README.hpi drvnotes*
+%doc README.hpi drvnotes.txt
+%attr(755,root,root) %{_bindir}/asi_firmware_updater
 %attr(755,root,root) %{_bindir}/asihpi*
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libhpi.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libhpi.so.9
+%attr(755,root,root) %{_libdir}/libhpimux.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libhpimux.so.9
+%attr(755,root,root) %{_libdir}/libhpiudp.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libhpiudp.so.9
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libhpi.so
+%attr(755,root,root) %{_libdir}/libhpimux.so
+%attr(755,root,root) %{_libdir}/libhpiudp.so
 %{_libdir}/libhpi.la
+%{_libdir}/libhpimux.la
+%{_libdir}/libhpiudp.la
 %{_includedir}/asihpi
 
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libhpi.a
+%{_libdir}/libhpimux.a
+%{_libdir}/libhpiudp.a
