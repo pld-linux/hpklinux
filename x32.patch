@@ -1,0 +1,27 @@
+--- hpklinux-4.06.03/configure.in~
++++ hpklinux-4.06.03/configure.in
+@@ -751,6 +751,7 @@ dnl   $ar_gcc_distro = Target Distribution (suse, slackware, etc)
+ 
+ 
+ AC_MSG_CHECKING(target architecture)
++ar_gcc_machine=`$CC -dumpmachine`
+ ar_gcc_arch=`$CC -dumpmachine | $AWK -F- "{ print \\$[1] }"`
+ ar_gcc_distro=`$CC -dumpmachine | $AWK -F- "{ print \\$[2] }"`
+ AC_MSG_RESULT("distro:$ar_gcc_distro arch:$ar_gcc_arch")
+@@ -758,8 +759,16 @@ AC_MSG_RESULT("distro:$ar_gcc_distro arch:$ar_gcc_arch")
+ AC_SUBST(VENDOR,$ar_gcc_distro)
+ AC_SUBST(ARCH,$ar_gcc_arch)
+ if test "$ar_gcc_arch" = "x86_64" ; then
++  case "$ar_gcc_machine" in
++    *-gnux32)
++  AC_SUBST(HPI_64BIT)
++  AC_SUBST(LIB_PATH,libx32)
++    ;;
++    *)
+   AC_SUBST(HPI_64BIT,"-D HPI_BUILD_64BIT")
+   AC_SUBST(LIB_PATH,lib64)
++    ;;
++  esac
+ else
+   AC_SUBST(HPI_64BIT)
+   AC_SUBST(LIB_PATH,lib)
