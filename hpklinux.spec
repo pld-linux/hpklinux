@@ -1,18 +1,18 @@
 Summary:	Linux HPI driver for AudioScience audio adapters
 Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
-Version:	4.06.03
-Release:	2
+Version:	4.14.07
+Release:	1
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: http://www.audioscience.com/internet/download/linux_drivers.htm
-Source0:	http://audioscience.com/internet/download/drivers/released/v4/06/03/%{name}-%{version}.tar.bz2
-# Source0-md5:	18b4f3864cdecec5c17ec222ee17f2c7
+Source0:	http://audioscience.com/internet/download/drivers/released/v4/14/07/%{name}-%{version}.tar.bz2
+# Source0-md5:	c86e2837803d5b234b43da5bfe963732
 Patch0:		x32.patch
 URL:		http://www.audioscience.com/internet/download/linux_drivers.htm
-BuildRequires:	autoconf
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
-BuildRequires:	libtool
+BuildRequires:	libtool >= 2:1.5
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -71,14 +71,17 @@ Statyczna biblioteka HPI.
 %{__autoconf}
 %{__automake}
 %configure \
-	--disable-kernel-compile
+	--disable-kernel-compile \
+	--disable-silent-rules \
+	--with-firmware=/lib/firmware
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	INSTALLFIRMWAREPATH=$RPM_BUILD_ROOT/lib/firmware/asihpi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,15 +94,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc README.hpi drvnotes.txt
 %attr(755,root,root) %{_bindir}/asi_firmware_updater
 %attr(755,root,root) %{_bindir}/asihpi*
+/lib/firmware/asihpi
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libhpi.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libhpi.so.9
+%attr(755,root,root) %ghost %{_libdir}/libhpi.so.10
 %attr(755,root,root) %{_libdir}/libhpimux.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libhpimux.so.9
+%attr(755,root,root) %ghost %{_libdir}/libhpimux.so.10
 %attr(755,root,root) %{_libdir}/libhpiudp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libhpiudp.so.9
+%attr(755,root,root) %ghost %{_libdir}/libhpiudp.so.10
 
 %files devel
 %defattr(644,root,root,755)

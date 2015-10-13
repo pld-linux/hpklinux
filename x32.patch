@@ -1,5 +1,5 @@
---- hpklinux-4.06.03/configure.in~
-+++ hpklinux-4.06.03/configure.in
+--- hpklinux-4.14.07/configure.ac~
++++ hpklinux-4.14.07/configure.ac
 @@ -751,6 +751,7 @@ dnl   $ar_gcc_distro = Target Distribution (suse, slackware, etc)
  
  
