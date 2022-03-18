@@ -1,18 +1,34 @@
+#
+# Conditional build:
+%bcond_without	python2	# CPython 2.x module
+%bcond_without	python3	# CPython 3.x module
+
 Summary:	Linux HPI driver for AudioScience audio adapters
 Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
-Version:	4.18.03
+Version:	4.20.36
+%define	subver	g76c09bc
 Release:	1
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: http://www.audioscience.com/internet/download/linux_drivers.htm
-Source0:	http://audioscience.com/internet/download/drivers/released/v4/18/03/%{name}-%{version}-1.tar.bz2
-# Source0-md5:	41b1c7223c6300493f3f71be57c39133
-Patch0:		x32.patch
+Source0:	http://www.audioscience.com/internet/download/drivers/released/v4/20/36/%{name}_%{version}-%{subver}.tar.gz
+# Source0-md5:	e99c79747f1e5505f930b159e16abc24
+Patch0:		%{name}-opt.patch
 URL:		http://www.audioscience.com/internet/download/linux_drivers.htm
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	libtool >= 2:1.5
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
+%if %{with python2}
+BuildRequires:	python-modules >= 1:2.7
+BuildRequires:	python-setuptools
+%endif
+%if %{with python3}
+BuildRequires:	python3-modules >= 1:3.4
+BuildRequires:	python3-setuptools
+%endif
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -61,27 +77,81 @@ Static HPI library.
 %description static -l pl.UTF-8
 Statyczna biblioteka HPI.
 
+%package -n python-hpi
+Summary:	Python Linux HPI library
+Summary(pl.UTF-8):	Biblioteka Linux HPI dla Pythona
+Group:		Libraries/Python
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description -n python-hpi
+Python Linux HPI library.
+
+%description -n python-hpi -l pl.UTF-8
+Biblioteka Linux HPI dla Pythona.
+
+%package -n python3-hpi
+Summary:	Python Linux HPI library
+Summary(pl.UTF-8):	Biblioteka Linux HPI dla Pythona
+Group:		Libraries/Python
+Requires:	%{name}-libs = %{version}-%{release}
+
+%description -n python3-hpi
+Python Linux HPI library.
+
+%description -n python3-hpi -l pl.UTF-8
+Biblioteka Linux HPI dla Pythona.
+
 %prep
-%setup -q -n %{name}-%{version}-1
+%setup -q -n %{name}_%{version}-%{subver}
 %patch0 -p1
 
 %build
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%{__automake}
-%configure \
-	--disable-kernel-compile \
-	--disable-silent-rules \
-	--with-firmware=/lib/firmware
-%{__make}
+CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+%{__make} -C hpi-lib \
+	CC="%{__cc}"
+
+CFLAGS="%{rpmcflags} %{rpmcppflags}" \
+%{__make} -C hpi-cli-apps \
+	CC="%{__cc}"
+
+cd asi-python
+
+%if %{with python2}
+%py_build
+%endif
+
+%if %{with python3}
+%py3_build
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -C hpi-lib install \
 	DESTDIR=$RPM_BUILD_ROOT \
-	INSTALLFIRMWAREPATH=$RPM_BUILD_ROOT/lib/firmware/asihpi
+	include-install-dir=%{_includedir}/asihpi \
+	lib-install-dir=%{_libdir}
+
+%{__make} -C hpi-cli-apps install \
+	DESTDIR=$RPM_BUILD_ROOT \
+	bin-install-dir=%{_bindir}
+
+%{__make} -C hpi-drv/firmware \
+	bin-install-base-path=$RPM_BUILD_ROOT/lib/firmware
+
+cd asi-python
+
+%if %{with python2}
+%py_install
+
+%py_postclean
+# package only py3 variant
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/*.py
+%endif
+
+%if %{with python3}
+%py3_install
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,7 +161,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.hpi drvnotes.txt
+%doc README.md
 %attr(755,root,root) %{_bindir}/asi_firmware_updater
 %attr(755,root,root) %{_bindir}/asihpi*
 /lib/firmware/asihpi
@@ -110,9 +180,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libhpi.so
 %attr(755,root,root) %{_libdir}/libhpimux.so
 %attr(755,root,root) %{_libdir}/libhpiudp.so
-%{_libdir}/libhpi.la
-%{_libdir}/libhpimux.la
-%{_libdir}/libhpiudp.la
 %{_includedir}/asihpi
 
 %files static
@@ -120,3 +187,22 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libhpi.a
 %{_libdir}/libhpimux.a
 %{_libdir}/libhpiudp.a
+
+%if %{with python2}
+%files -n python-hpi
+%defattr(644,root,root,755)
+%{py_sitescriptdir}/audioscience
+%{py_sitescriptdir}/hpi-2.0-py*.egg-info
+%endif
+
+%if %{with python3}
+%files -n python3-hpi
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/dab_data.py
+%attr(755,root,root) %{_bindir}/dabtest.py
+%attr(755,root,root) %{_bindir}/hpicontrol.py
+%attr(755,root,root) %{_bindir}/hpimixer.py
+%attr(755,root,root) %{_bindir}/hpisave.py
+%{py3_sitescriptdir}/audioscience
+%{py3_sitescriptdir}/hpi-2.0-py*.egg-info
+%endif
