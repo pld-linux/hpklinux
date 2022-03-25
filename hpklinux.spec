@@ -8,7 +8,7 @@ Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
 Version:	4.20.36
 %define	subver	g76c09bc
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: http://www.audioscience.com/internet/download/linux_drivers.htm
