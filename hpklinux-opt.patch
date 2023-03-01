@@ -1,27 +1,26 @@
---- hpklinux_4.20.36-g76c09bc/hpi-cli-apps/Makefile.orig	2021-10-19 20:33:01.000000000 +0200
-+++ hpklinux_4.20.36-g76c09bc/hpi-cli-apps/Makefile	2022-03-18 21:47:57.802049088 +0100
-@@ -33,14 +33,16 @@ AR = $(CROSS_COMPILE)ar
+--- hpklinux_4.20.38/hpi-cli-apps/Makefile.orig	2023-03-01 15:29:44.978972562 +0100
++++ hpklinux_4.20.38/hpi-cli-apps/Makefile	2023-03-01 16:13:31.268078066 +0100
+@@ -33,14 +33,17 @@ AR = $(CROSS_COMPILE)ar
  LD = $(CROSS_COMPILE)ld
  
  #WARNFULL_CFLAGS = -Wextra -pedantic -std=gnu99 -Wconversion
--CFLAGS = -pipe -g -O2 -Wall -DHPI_OS_LINUX -DHPI_BUILD_EXCLUDE_ALL_DEPRECATED \
+-CFLAGS += -pipe -g -O2 -Wall -DHPI_OS_LINUX -DHPI_BUILD_EXCLUDE_ALL_DEPRECATED \
 +CFLAGS += -pipe -Wall -DHPI_OS_LINUX -DHPI_BUILD_EXCLUDE_ALL_DEPRECATED \
  	$(WARNFULL_CFLAGS)
  
  # Find out if this is a 64-bit build
--ar_gcc_arch=$(shell $(CC) -dumpmachine | awk -F- '{ print $$1 }')
--ifeq ($(ar_gcc_arch),x86_64)
 +ar_gcc_machine=$(shell $(CC) -dumpmachine)
 +ifneq ($(patsubst %gnux32,,$(ar_gcc_machine)),)
-+ifeq ($(patsubst x86_64%,,$(ar_gcc_machine)),)
+ ar_gcc_arch=$(shell $(CC) -dumpmachine | awk -F- '{ print $$1 }')
+ ifneq (,$(filter $(ar_gcc_arch),x86_64 aarch64))
  	CFLAGS += -D HPI_BUILD_64BIT
  endif
 +endif
  
  bins = asihpitest asihpiassert asihpitune asihpirec asihpiplay \
  	asi_firmware_updater asihpibl asihpirds asihpi_si4688
---- hpklinux_4.20.36-g76c09bc/hpi-lib/Makefile.orig	2022-03-18 21:49:00.505042730 +0100
-+++ hpklinux_4.20.36-g76c09bc/hpi-lib/Makefile	2022-03-18 21:49:05.541682110 +0100
+--- hpklinux_4.20.38/hpi-lib/Makefile.orig	2022-11-02 09:53:09.000000000 +0100
++++ hpklinux_4.20.38/hpi-lib/Makefile	2023-03-01 16:49:30.569713458 +0100
 @@ -37,7 +37,7 @@ LIB_VER_INC = 0
  lib-version-suffix = $(LIB_VER_MAJOR).$(LIB_VER_MINOR).$(LIB_VER_INC)
  
@@ -31,17 +30,16 @@
  	-DHPI_BUILD_DEBUG \
  	-DHPI_BUILD_INCLUDE_INTERNAL \
  	-DHPI_BUILD_EXCLUDE_ALL_DEPRECATED \
-@@ -51,13 +51,17 @@ dynamic-libs = libhpi.so libhpiudp.so li
+@@ -51,13 +51,18 @@ dynamic-libs = libhpi.so libhpiudp.so li
  libs = $(static-libs) $(dynamic-libs)
  
  # Find out if this is a 64-bit build
--ar_gcc_arch=$(shell $(CC) -dumpmachine | awk -F- '{ print $$1 }')
--ifeq ($(ar_gcc_arch),x86_64)
 +ar_gcc_machine=$(shell $(CC) -dumpmachine)
 +ifeq ($(patsubst %gnux32,,$(ar_gcc_machine)),)
 +	lib-install-dir-candidates = $(install-prefix)/libx32
 +else
-+ifeq ($(patsubst x86_64%,,$(ar_gcc_machine)),)
+ ar_gcc_arch=$(shell $(CC) -dumpmachine | awk -F- '{ print $$1 }')
+ ifneq (,$(filter $(ar_gcc_arch),x86_64 aarch64))
  	CFLAGS += -D HPI_BUILD_64BIT
 -	lib-install-dir-candidates = $(install-prefix)/lib64 $(install-prefix)/lib
 +	lib-install-dir-candidates = $(install-prefix)/lib64
