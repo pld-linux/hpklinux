@@ -6,13 +6,13 @@
 Summary:	Linux HPI driver for AudioScience audio adapters
 Summary(pl.UTF-8):	Linuksowy sterownik HPI do kart dźwiękowych AudioScience
 Name:		hpklinux
-Version:	4.20.38
+Version:	4.20.43
 Release:	1
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: http://www.audioscience.com/internet/download/linux_drivers.htm
-Source0:	http://www.audioscience.com/internet/download/drivers/released/v4/20/38/%{name}_%{version}.tar.gz
-# Source0-md5:	ad0203c041ace44c724c374e094f8c76
+Source0:	http://www.audioscience.com/internet/download/drivers/released/v4/20/43/%{name}_%{version}.tar.gz
+# Source0-md5:	b039b650d7c424d311ec0889a293ec86
 Patch0:		%{name}-opt.patch
 URL:		http://www.audioscience.com/internet/download/linux_drivers.htm
 BuildRequires:	autoconf >= 2.50
