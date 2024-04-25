@@ -1,6 +1,5 @@
 #
 # Conditional build:
-%bcond_without	python2	# CPython 2.x module
 %bcond_without	python3	# CPython 3.x module
 
 Summary:	Linux HPI driver for AudioScience audio adapters
@@ -20,10 +19,6 @@ BuildRequires:	automake
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
-%if %{with python2}
-BuildRequires:	python-modules >= 1:2.7
-BuildRequires:	python-setuptools
-%endif
 %if %{with python3}
 BuildRequires:	python3-modules >= 1:3.4
 BuildRequires:	python3-setuptools
@@ -76,18 +71,6 @@ Static HPI library.
 %description static -l pl.UTF-8
 Statyczna biblioteka HPI.
 
-%package -n python-hpi
-Summary:	Python Linux HPI library
-Summary(pl.UTF-8):	Biblioteka Linux HPI dla Pythona
-Group:		Libraries/Python
-Requires:	%{name}-libs = %{version}-%{release}
-
-%description -n python-hpi
-Python Linux HPI library.
-
-%description -n python-hpi -l pl.UTF-8
-Biblioteka Linux HPI dla Pythona.
-
 %package -n python3-hpi
 Summary:	Python Linux HPI library
 Summary(pl.UTF-8):	Biblioteka Linux HPI dla Pythona
@@ -115,10 +98,6 @@ CFLAGS="%{rpmcflags} %{rpmcppflags}" \
 
 cd asi-python
 
-%if %{with python2}
-%py_build
-%endif
-
 %if %{with python3}
 %py3_build
 %endif
@@ -139,14 +118,6 @@ rm -rf $RPM_BUILD_ROOT
 	bin-install-base-path=$RPM_BUILD_ROOT/lib/firmware
 
 cd asi-python
-
-%if %{with python2}
-%py_install
-
-%py_postclean
-# package only py3 variant
-%{__rm} $RPM_BUILD_ROOT%{_bindir}/*.py
-%endif
 
 %if %{with python3}
 %py3_install
@@ -186,13 +157,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libhpi.a
 %{_libdir}/libhpimux.a
 %{_libdir}/libhpiudp.a
-
-%if %{with python2}
-%files -n python-hpi
-%defattr(644,root,root,755)
-%{py_sitescriptdir}/audioscience
-%{py_sitescriptdir}/hpi-2.0-py*.egg-info
-%endif
 
 %if %{with python3}
 %files -n python3-hpi
