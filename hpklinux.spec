@@ -10,7 +10,7 @@ Release:	1
 License:	GPL v2
 Group:		Applications/Sound
 #Source0Download: https://www.audioscience.com/internet/download/linux_drivers.htm
-Source0:	https://www.audioscience.com/internet/download/drivers/released/v4/20/42/%{name}_%{version}.tar.gz
+Source0:	https://www.audioscience.com/internet/download/drivers/released/v4/20/44/%{name}_%{version}.tar.gz
 # Source0-md5:	9f3f0ae49e4386501cb9c00848799da1
 Patch0:		%{name}-opt.patch
 URL:		https://www.audioscience.com/internet/download/linux_drivers.htm
